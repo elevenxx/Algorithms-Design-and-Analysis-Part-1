@@ -1,22 +1,24 @@
 """
 Integer Multiplication
 The Karatsuba algorithm
+x = a*10**n + b
+y = c*10**n + d
+then, x*y = ac*10**(2*n) + (ad+bc)*10**n + bd
 """
 def karatsuba(x, y):
     # base case
     if len(str(x)) == 1 or len(str(y)) == 1:
         return x * y
     else:
-        n = max(len(str(x)), len(str(y)))
-        n2 = n // 2
-        a, b = x // 10**n2, x % 10**n2
-        c, d = y // 10**n2, y % 10**n2
+        n = max(len(str(x)), len(str(y))) // 2
+        a, b = x // 10**n, x % 10**n
+        c, d = y // 10**n, y % 10**n
         ac = karatsuba(a, c)
         bd = karatsuba(b, d)
-        ad_plus_bd = karatsuba(a+b, c+d) - ac - bd
-        prod = ac * 10**(2*n2) + ad_plus_bd * 10**n2 + bd
+        ad_plus_bc = karatsuba(a+b, c+d) - ac - bd
+        prod = ac * 10**(2*n) + ad_plus_bc * 10**n + bd
         print(prod)
         return prod
 
 if __name__ == "__main__":
-    karatsuba(1234, 567)
+    karatsuba(123, 456)
