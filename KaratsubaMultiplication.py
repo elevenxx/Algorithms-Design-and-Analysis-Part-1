@@ -17,8 +17,10 @@ def karatsuba(x, y):
         bd = karatsuba(b, d)
         ad_plus_bc = karatsuba(a+b, c+d) - ac - bd
         prod = ac * 10**(2*n) + ad_plus_bc * 10**n + bd
-        print(prod)
         return prod
 
 if __name__ == "__main__":
-    karatsuba(123, 456)
+    a = 3141592653589793238462643383279502884197169399375105820974944592
+    b = 2718281828459045235360287471352662497757247093699959574966967627
+    ans = karatsuba(a, b)
+    print(ans)
