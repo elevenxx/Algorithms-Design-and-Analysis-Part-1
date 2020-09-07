@@ -18,7 +18,7 @@ reference:
 http://courses.csail.mit.edu/6.006/spring11/lectures/lec02.pdf
 https://ideone.com/K3ggGm
 """
-
+# find local minimum in linear time
 def findLocalMinLinearTime(M, n):
     return helperColumn(M, n, 0, n-1, 0, n-1)
 
@@ -26,9 +26,16 @@ def findLocalMinLinearTime(M, n):
 def helperColumn(M, n, loCol, hiCol, loRow, hiRow):
     if loCol == hiCol:
         return min(M[loRow:hiRow+1][loCol])
+
     midCol = (loCol+hiCol) // 2
-    tmp = min(M[loRow:hiRow+1][midCol])
+    tmp = M[loRow][midCol]
+    for row in range(loRow, hiRow + 1):
+        tmp = min(tmp, M[row][midCol])
+
     central, left, right = True, False, False
+
+    # check if tmp, which on the central column, is a local minimum
+    # it is if there is no element on left and right column, smaller than tmp
     if midCol-1 >= 0:
         for row in range(loRow, hiRow+1):
             if M[row][midCol-1] < tmp:
@@ -42,6 +49,7 @@ def helperColumn(M, n, loCol, hiCol, loRow, hiRow):
                 central = False
                 left = False
                 right = True
+
     if central: return tmp
     if right: return helperRow(M, n, midCol+1, hiCol, loRow, hiRow)
     if left: return helperRow(M, n, loCol, midCol-1, loRow, hiRow)
@@ -50,9 +58,15 @@ def helperColumn(M, n, loCol, hiCol, loRow, hiRow):
 def helperRow(M, n, loCol, hiCol, loRow, hiRow):
     if loRow == hiRow:
         return min(M[loRow][loCol:hiCol+1])
+
     midRow = (loRow+hiRow) // 2
-    tmp = min(M[midRow][loCol:hiCol+1])
+    tmp = M[midRow][loCol]
+    for col in range(loCol, hiCol+1):
+        tmp = min(tmp, M[midRow][col])
     central, up, down = True, False, False
+
+    # check if tmp, which on the central row, is a local minimum
+    # it is if there is no element on upper and lower row, smaller than tmp
     if midRow-1 >= 0:
         for col in range(loCol, hiCol+1):
             if M[midRow-1][col] < tmp:
@@ -66,12 +80,13 @@ def helperRow(M, n, loCol, hiCol, loRow, hiRow):
                 central = False
                 up = False
                 down = True
+
     if central: return tmp
     if up: return helperColumn(M, n, loCol, hiCol, loRow, midRow-1)
     if down: return helperColumn(M, n, loCol, hiCol, midRow+1, hiRow)
 
 if __name__ == "__main__":
-    Matrix = [[1, 3, 2, 5, 7], [0, 9, 10, 20, -3], [-8, 8, 4, 99, 100], [55, 21, -67, 88, -77],[13, -23, 99, 15, 33]]
+    Matrix = [[1, 3, 2, 5, 7], [0, 9, 10, 20, -3], [11, 8, 4, 99, 100], [55, 21, -67, 88, -77],[13, -23, 99, 15, 33]]
     n = len(Matrix)
     ans = findLocalMinLinearTime(Matrix, n)
     print(ans)
