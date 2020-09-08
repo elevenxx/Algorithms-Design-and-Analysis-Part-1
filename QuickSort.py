@@ -10,6 +10,10 @@ swap A[i] and A[l] # make pivot first
 j = partition(A, l, r) # the pivot's final position
 quicksort(A, l, j-1)
 quicksort(A, j+1, l)
+mark: the reason why pivot choosing is important is that every pair
+elements of array A has only 0 or 1 comparisons. If good pivot, most pairs
+have not to compare at all, because the two elements are split in different
+halves. If bad pivot, then most pairs have to compare once.
 """
 import random
 import sys
@@ -23,7 +27,7 @@ def quickSort(A, l, r, type):
     j = partition(A, l, r)
     C1 = quickSort(A, l, j - 1, type)
     C2 = quickSort(A, j + 1, r, type)
-    return r-l+C1+C2
+    return r - l + C1 + C2
 
 
 def choosePivot(A, l, r, type):
@@ -60,7 +64,16 @@ if __name__ == '__main__':
     with open('problem5.6test2.txt', 'r') as f:
         for line in f:
             A.append(int(line.strip('\n').split(',')[0]))
+
+    # 'first', 620; 'last', 573; 'random', undecided; 'median-of-three', 502
     type = 'median-of-three'
-    count = quickSort(A, 0, len(A)-1, type)
-    print(A)
-    print(count) # 502
+    if type == 'random':
+        cnt = []; times = 10
+        for _ in range(times):
+            ans = quickSort(A, 0, len(A)-1, type)
+            cnt.append(ans)
+        count = sum(cnt) // times
+    else:
+        count = quickSort(A, 0, len(A) - 1, type)
+    #print(A)
+    print(count)
