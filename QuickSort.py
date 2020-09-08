@@ -12,6 +12,7 @@ quicksort(A, l, j-1)
 quicksort(A, j+1, l)
 """
 import random
+import sys
 
 
 def quickSort(A, l, r, type):
@@ -34,8 +35,8 @@ def choosePivot(A, l, r, type):
         return random.randint(l, r)
     elif type == 'median-of-three':
         mid = (l + r) // 2
-        three = [A[l], A[r], A[mid]]
-        return sorted(three)[1]
+        median = sorted([A[l], A[r], A[mid]])[1]
+        return A.index(median)
 
 
 # input: array A of n distinct integers, left and right endpoints l, r
@@ -53,8 +54,13 @@ def partition(A, l, r):
     return i - 1
 
 if __name__ == '__main__':
-    A = [3, 8, 2, 5, 1, 4, 7, 6, 10, 9, 0, 12, 14, 13, 20, 18, 19, 16, 15, 17, 11]
+    # [3, 8, 2, 5, 1, 4, 7, 6]
+    # [2148, 9058, 7742, 3153, 6324, 609, 7628, 5469, 7017, 504]
+    A = []
+    with open('problem5.6test2.txt', 'r') as f:
+        for line in f:
+            A.append(int(line.strip('\n').split(',')[0]))
     type = 'median-of-three'
-    ans = quickSort(A, 0, len(A)-1, type)
+    count = quickSort(A, 0, len(A)-1, type)
     print(A)
-    print(ans)
+    print(count) # 502
